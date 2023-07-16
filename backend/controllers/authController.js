@@ -5,7 +5,7 @@ const User = require("../models/User");
 const secretKey = process.env.JWT_SECRET_KEY.toString();
 
 exports.registerUser = async (req, res) => {
-  const { username, password } = req.body;
+  const { fullName, email, password } = req.body;
 
   try {
     const isTableExists = await User.isTableExists();
@@ -13,14 +13,14 @@ exports.registerUser = async (req, res) => {
       await User.createTableIfNotExists();
     }
 
-    const existingUser = await User.findOne({ username });
+    const existingUser = await User.findOne({ fullName });
     if (existingUser) {
       return res.status(400).json({ error: "Username already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({ username, password: hashedPassword });
+    const newUser = new User({ fullName, email, password: hashedPassword });
     await newUser.save();
 
     res.status(201).json({ message: "Registration successful" });
@@ -31,10 +31,10 @@ exports.registerUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
-  const { username, password } = req.body;
+  const { fullName, password } = req.body;
 
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ fullName });
     if (!user) {
       return res.status(401).json({ error: "Invalid credentials" });
     }

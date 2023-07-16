@@ -21,9 +21,10 @@ pool
   .catch((err) => console.error("Error connecting to PostgreSQL: ", err));
 
 class User {
-  constructor({ id, username, password }) {
+  constructor({ id, fullName, email, password }) {
     this.id = id;
-    this.username = username;
+    this.fullName = fullName;
+    this.email = email;
     this.password = password;
   }
 
@@ -48,7 +49,8 @@ class User {
     try {
       const query = `CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
-        username VARCHAR(255) UNIQUE NOT NULL,
+        fullName VARCHAR(255) UNIQUE NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL
       )`;
       await pool.query(query);
@@ -58,10 +60,10 @@ class User {
     }
   }
 
-  static async findOne({ username }) {
+  static async findOne({ fullName }) {
     try {
-      const query = "SELECT * FROM users WHERE username = $1";
-      const result = await pool.query(query, [username]);
+      const query = "SELECT * FROM users WHERE fullName = $1";
+      const result = await pool.query(query, [fullName]);
       const user = result.rows[0];
       return user ? new User(user) : null;
     } catch (err) {
@@ -73,8 +75,12 @@ class User {
   async save() {
     try {
       const query =
-        "INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id";
-      const result = await pool.query(query, [this.username, this.password]);
+        "INSERT INTO users (fullName, email, password) VALUES ($1, $2, $3) RETURNING id";
+      const result = await pool.query(query, [
+        this.fullName,
+        this.email,
+        this.password,
+      ]);
       this.id = result.rows[0].id;
     } catch (err) {
       console.error("Error saving user:", err);
