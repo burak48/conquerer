@@ -6,12 +6,14 @@ const app = express();
 const port = config.port || 3001;
 
 const authRoutes = require("./routes/authRoutes");
+const accountRoutes = require("./routes/accountRoutes");
 
 app.use(cors());
 
 app.use(express.json());
 
 app.use("/auth", authRoutes);
+app.use("/account", accountRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");

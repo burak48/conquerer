@@ -25,8 +25,9 @@ const Login = () => {
       );
 
       if (response.status === 200) {
-        const { token } = response.data;
+        const { user, token } = response.data;
         localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
         navigate("/home");
       } else {
         console.log("Authentication failed");

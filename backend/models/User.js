@@ -37,7 +37,6 @@ class User {
           WHERE  table_name = 'users'
         )`;
       const result = await pool.query(query);
-      console.log("result: ", result);
       return result.rows[0].exists;
     } catch (err) {
       console.error("Error checking if users table exists:", err);
@@ -49,7 +48,9 @@ class User {
     try {
       const query = `CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
-        fullName VARCHAR(255) UNIQUE NOT NULL,
+        fullname VARCHAR(255) NOT NULL,
+        username VARCHAR(255) UNIQUE,
+        birthdate VARCHAR(255),
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL
       )`;
@@ -62,10 +63,10 @@ class User {
 
   static async findOne({ fullName }) {
     try {
-      const query = "SELECT * FROM users WHERE fullName = $1";
+      const query = "SELECT * FROM users WHERE fullname = $1";
       const result = await pool.query(query, [fullName]);
       const user = result.rows[0];
-      return user ? new User(user) : null;
+      return user;
     } catch (err) {
       console.error("Error finding user:", err);
       throw new Error("Failed to find user");
@@ -85,6 +86,47 @@ class User {
     } catch (err) {
       console.error("Error saving user:", err);
       throw new Error("Failed to save user");
+    }
+  }
+
+  static async updateInfo({ userId, fullName, username, birthDate }) {
+    try {
+      const query =
+        "UPDATE users SET fullname = $1, username = $2, birthdate = $3 WHERE id = $4";
+      await pool.query(query, [fullName, username, birthDate, userId]);
+    } catch (err) {
+      console.error("Error updating personal info:", err);
+      throw new Error("Failed to update personal info");
+    }
+  }
+
+  static async updateSecurityInfo({ userId, fullName, hashedPassword }) {
+    try {
+      const user = await User.findOne({ fullName });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const query = "UPDATE users SET password = $1 WHERE id = $2";
+      await pool.query(query, [hashedPassword, userId]);
+
+      return { message: "Password updated successfully" };
+    } catch (err) {
+      console.error("Error updating security info:", err);
+      throw new Error("Failed to update security info");
+    }
+  }
+
+  static async deleteUserAccount({ userId }) {
+    try {
+      const deleteAccountQuery = "DELETE FROM users WHERE id = $1";
+      await pool.query(deleteAccountQuery, [userId]);
+
+      return { message: "Account deleted successfully" };
+    } catch (err) {
+      console.error("Error deleting account:", err);
+      throw new Error("Failed to delete account");
     }
   }
 }

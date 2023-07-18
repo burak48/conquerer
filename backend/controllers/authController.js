@@ -48,7 +48,12 @@ exports.loginUser = async (req, res) => {
       expiresIn: "1h",
     });
 
-    res.json({ token });
+    const userData = {
+      id: user.id,
+      fullName: user.fullname,
+      email: user.email,
+    };
+    res.json({ user: userData, token });
   } catch (err) {
     console.error("Error during login:", err);
     res.status(500).json({ error: "Login failed" });
