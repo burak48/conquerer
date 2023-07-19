@@ -1,5 +1,6 @@
 const config = require("../config");
 const { Pool } = require("pg");
+const Comment = require("./Comment");
 
 const dbHost = config.dbHost;
 const dbPort = config.dbPort;
@@ -99,6 +100,10 @@ class Post {
       console.error("Error deleting post:", error);
       throw new Error("Failed to delete post");
     }
+  }
+
+  static async getComments(id) {
+    return Comment.findByBlogId(id);
   }
 }
 

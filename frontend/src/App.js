@@ -6,6 +6,7 @@ import Register from "./components/Register";
 import Account from "./components/Account";
 import CreatePostPage from "./components/AddBlog";
 import UpdatePostPage from "./components/Posts";
+import BlogDetails from "./components/BlogDetails";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/account" element={<Account />} />
         <Route path="/post" element={<CreatePostPage />} />
         <Route path="/post/:id" element={<UpdatePostPage />} />
+        <Route path="/blogs/:id" element={<BlogDetails />} />
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
     </BrowserRouter>

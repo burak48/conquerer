@@ -129,6 +129,30 @@ class User {
       throw new Error("Failed to delete account");
     }
   }
+
+  static async findByFullName(fullName) {
+    try {
+      const query = "SELECT * FROM users WHERE fullname = $1";
+      const result = await pool.query(query, [fullName]);
+      const user = result.rows[0];
+      return user ? new User(user) : null;
+    } catch (err) {
+      console.error("Error finding user by name:", err);
+      throw new Error("Failed to find user by name");
+    }
+  }
+
+  static async findNameById(userId) {
+    try {
+      const query = "SELECT fullname FROM users WHERE id = $1";
+      const result = await pool.query(query, [userId]);
+      const user = result.rows[0];
+      return user ? user.fullname : null;
+    } catch (err) {
+      console.error("Error finding user:", err);
+      throw new Error("Failed to find user");
+    }
+  }
 }
 
 module.exports = User;
