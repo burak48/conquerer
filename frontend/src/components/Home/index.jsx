@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import MyComments from "../MyComments";
 import { Link } from "react-router-dom";
+import MyPosts from "../MyPosts";
+import LastPosts from "../LastPosts";
+import CategoryPosts from "../CategoryPosts";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("My Posts");
@@ -155,46 +158,22 @@ const Home = () => {
           </div>
 
           <div className="tabcontent">
-            {activeTab === "My Posts" && (
-              <div>
-                <h3>My Posts</h3>
-                <p>This is the content for "My Posts".</p>
-              </div>
-            )}
+            {activeTab === "My Posts" && <MyPosts />}
 
-            {activeTab === "Last Posts" && (
-              <div>
-                <h3>Last Posts</h3>
-                <p>This is the content for "Last Posts".</p>
-              </div>
-            )}
+            {activeTab === "Last Posts" && <LastPosts />}
 
             {activeTab === "Business" && (
-              <div>
-                <h3>Business</h3>
-                <p>This is the content for "Business".</p>
-              </div>
+              <CategoryPosts category={"Business"} />
             )}
 
-            {activeTab === "Money" && (
-              <div>
-                <h3>Money</h3>
-                <p>This is the content for "Money".</p>
-              </div>
-            )}
+            {activeTab === "Money" && <CategoryPosts category={"Money"} />}
 
             {activeTab === "Technology" && (
-              <div>
-                <h3>Technology</h3>
-                <p>This is the content for "Technology".</p>
-              </div>
+              <CategoryPosts category={"Technology"} />
             )}
 
             {activeTab === "Artificial Intelligence" && (
-              <div>
-                <h3>Artificial Intelligence</h3>
-                <p>This is the content for "Artificial Intelligence".</p>
-              </div>
+              <CategoryPosts category={"Artificial Intelligence"} />
             )}
           </div>
         </div>

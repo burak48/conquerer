@@ -105,6 +105,42 @@ class Post {
   static async getComments(id) {
     return Comment.findByBlogId(id);
   }
+
+  static async getPostsByUserId(userId) {
+    try {
+      // const query = `
+      //   SELECT * FROM posts
+      //   WHERE user_id = $1
+      // `;
+      const query = `
+      SELECT
+        p.id,
+        p.category,
+        p.title,
+        COUNT(c.id) AS comments_count
+      FROM posts p
+      LEFT JOIN comments c ON p.id = c.blog_id
+      WHERE p.user_id = $1
+      GROUP BY p.id
+    `;
+      const result = await pool.query(query, [userId]);
+      return result.rows;
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      throw new Error("Failed to fetch posts");
+    }
+  }
+
+  static async getPostsByCategory(categoryName) {
+    try {
+      const selectQuery = "SELECT * FROM posts WHERE category = $1";
+      const result = await pool.query(selectQuery, [categoryName]);
+      return result.rows.map((row) => new Post(row));
+    } catch (error) {
+      console.error("Error fetching posts by category:", error);
+      throw error;
+    }
+  }
 }
 
 module.exports = Post;

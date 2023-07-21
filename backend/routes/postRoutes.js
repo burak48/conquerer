@@ -18,4 +18,10 @@ router.put("/:id", postController.updatePost);
 // Delete a blog post
 router.delete("/:id", postController.deletePost);
 
+// Get all blog posts with a specific user
+router.get("/user/:user_id", postController.getPostsByUserId);
+
+// Get all blog posts with a specific category
+router.get("/category/:category_name", postController.getPostsByCategory);
+
 module.exports = router;

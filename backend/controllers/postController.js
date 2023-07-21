@@ -65,3 +65,27 @@ exports.deletePost = async (req, res) => {
     res.status(500).json({ error: "Failed to delete blog post" });
   }
 };
+
+exports.getPostsByUserId = async (req, res) => {
+  const { user_id } = req.params;
+
+  try {
+    const posts = await Post.getPostsByUserId(user_id);
+    res.json(posts);
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).json({ error: "Failed to fetch posts" });
+  }
+};
+
+exports.getPostsByCategory = async (req, res) => {
+  const { category_name } = req.params;
+
+  try {
+    const posts = await Post.getPostsByCategory(category_name);
+    res.json(posts);
+  } catch (error) {
+    console.error("Error fetching posts by category:", error);
+    res.status(500).json({ error: "Failed to fetch posts" });
+  }
+};

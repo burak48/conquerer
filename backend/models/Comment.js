@@ -53,8 +53,6 @@ class Comment {
   }
 
   static async findByBlogId(blogId) {
-    console.log("blogID: ", blogId);
-
     try {
       const query = "SELECT * FROM comments WHERE blog_id = $1";
       const result = await pool.query(query, [blogId]);
