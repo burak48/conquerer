@@ -89,3 +89,15 @@ exports.getPostsByCategory = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch posts" });
   }
 };
+
+exports.searchPostsByTitle = async (req, res) => {
+  const { search_term } = req.query;
+
+  try {
+    const posts = await Post.findByTitle(search_term);
+    res.json(posts);
+  } catch (error) {
+    console.error("Error searching posts by title:", error);
+    res.status(500).json({ error: "Failed to search posts" });
+  }
+};

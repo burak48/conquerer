@@ -9,6 +9,9 @@ router.post("/", postController.createPost);
 // Get all blog posts
 router.get("/", postController.getAllPosts);
 
+// Search posts by title query
+router.get("/search", postController.searchPostsByTitle);
+
 // Get a specific blog post
 router.get("/:id", postController.getPostById);
 

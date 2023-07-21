@@ -141,6 +141,17 @@ class Post {
       throw error;
     }
   }
+
+  static async findByTitle(title) {
+    try {
+      const selectQuery = "SELECT * FROM posts WHERE title LIKE $1";
+      const result = await pool.query(selectQuery, [`%${title}%`]);
+      return result.rows.map((row) => new Post(row));
+    } catch (error) {
+      console.error("Error fetching posts by title:", error);
+      throw error;
+    }
+  }
 }
 
 module.exports = Post;

@@ -4,23 +4,14 @@ import { Link } from "react-router-dom";
 import MyPosts from "../MyPosts";
 import LastPosts from "../LastPosts";
 import CategoryPosts from "../CategoryPosts";
+import SearchPosts from "../SearchPosts";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("My Posts");
-  const [searchQuery, setSearchQuery] = useState("");
 
   const handleTabClick = (tabTitle) => {
     setActiveTab(tabTitle);
   };
-
-  const handleSearch = (e) => {
-    setSearchQuery(e.target.value);
-  };
-
-  // Filter posts based on searchQuery
-  //   const filteredPosts = posts.filter((post) =>
-  //     post.title.toLowerCase().includes(searchQuery.toLowerCase())
-  //   );
 
   return (
     <div className="p-4 flex flex-col min-h-screen">
@@ -86,13 +77,7 @@ const Home = () => {
 
         {/* Middle grid */}
         <div className="my-8">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={handleSearch}
-            className="w-full border border-gray-300 p-2 rounded mb-4"
-            placeholder="Search by post title..."
-          />
+          <SearchPosts />
 
           <div className="border-b border-gray-300 mb-4 space-x-4">
             <button
