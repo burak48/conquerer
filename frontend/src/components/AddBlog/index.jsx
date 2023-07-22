@@ -28,19 +28,16 @@ const CreatePostPage = () => {
       const description = e.target.description.value;
       const category = e.target.category.value;
 
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/posts`,
-        {
-          userId: user.id,
-          title,
-          description,
-          category,
-        }
-      );
+      await axios.post(`${process.env.REACT_APP_API_URL}/posts`, {
+        userId: user.id,
+        title,
+        description,
+        category,
+      });
 
-      console.log("Post created successfully with ID:", response.data.id);
-
-      e.target.reset();
+      setTitle("");
+      setDescription("");
+      setCategory("");
     } catch (error) {
       console.error("Error creating post:", error);
     }

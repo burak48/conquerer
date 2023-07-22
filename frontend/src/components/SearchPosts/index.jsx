@@ -6,13 +6,9 @@ const SearchPosts = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/posts/search`,
-        {
-          params: { search_term: searchQuery },
-        }
-      );
-      console.log("response.data: ", response.data);
+      await axios.get(`${process.env.REACT_APP_API_URL}/posts/search`, {
+        params: { search_term: searchQuery },
+      });
     } catch (error) {
       console.error("Error searching posts:", error);
     }

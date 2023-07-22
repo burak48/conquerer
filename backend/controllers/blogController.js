@@ -94,9 +94,10 @@ exports.getBlogDetails = async (req, res) => {
     const formattedCreatedDate = formatDate(blog.created_at);
     blog.created_at = formattedCreatedDate;
 
-    const formattedUpdatedDate = formatDate(blog.updated_at);
-    blog.updated_at = formattedUpdatedDate;
-
+    if (blog.updated_at !== null) {
+      const formattedUpdatedDate = formatDate(blog.updated_at);
+      blog.updated_at = formattedUpdatedDate;
+    }
     res.json({ blog, comments });
   } catch (err) {
     console.error("Error fetching blog details:", err);

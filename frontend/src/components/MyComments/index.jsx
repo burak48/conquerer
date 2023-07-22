@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./styles.css";
 
 const MyComments = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -24,15 +25,8 @@ const MyComments = () => {
     setShowMoreButton(false);
   };
 
-  console.log(myComments);
-
   return (
-    <div
-      className="border border-gray-300 p-2 mt-8 rounded flex flex-col overflow-y-auto"
-      style={{
-        maxHeight: "500px",
-      }}
-    >
+    <div className="custom-max-height-500 border border-gray-300 p-2 mt-8 rounded flex flex-col overflow-y-auto">
       <h3 className="text-xl font-bold mb-4">My Comments</h3>
       <div className="grid grid-cols-2 gap-4">
         {myComments.slice(0, numCommentsToShow).map((comment) => (

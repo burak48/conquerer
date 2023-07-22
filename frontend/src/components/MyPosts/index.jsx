@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import "./styles.css";
 
 const MyPosts = () => {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -23,7 +24,7 @@ const MyPosts = () => {
   }, [user.id]);
 
   return (
-    <div>
+    <div className="custom-max-height-75 overflow-y-auto">
       {posts.map((post) => (
         <div
           key={post.id}

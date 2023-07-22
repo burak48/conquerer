@@ -51,7 +51,9 @@ exports.loginUser = async (req, res) => {
     const userData = {
       id: user.id,
       fullName: user.fullname,
+      userName: user?.username,
       email: user.email,
+      birthDate: user?.birthdate,
     };
     res.json({ user: userData, token });
   } catch (err) {

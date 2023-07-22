@@ -62,7 +62,7 @@ exports.updatePost = async (req, res) => {
       updated_at: updatedAt,
     });
     if (!updatedPost) {
-      return res.status(404).json({ error: "Blog post not found" });
+      return;
     }
     res.json(updatedPost);
   } catch (error) {

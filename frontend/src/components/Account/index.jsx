@@ -5,8 +5,8 @@ const Account = () => {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const [fullName, setFullName] = useState(user.fullName);
-  const [username, setUsername] = useState("");
-  const [birthDate, setBirthDate] = useState("");
+  const [username, setUsername] = useState(user?.userName);
+  const [birthDate, setBirthDate] = useState(user?.birthDate);
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
 
@@ -14,7 +14,7 @@ const Account = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.put(
+      await axios.put(
         `${process.env.REACT_APP_API_URL}/account/update-personal-info`,
         {
           userId: user.id,
@@ -24,11 +24,18 @@ const Account = () => {
         }
       );
 
-      console.log(response.data.message);
+      const updatedUser = {
+        ...user,
+        fullName,
+        userName: username,
+        birthDate,
+      };
 
-      setFullName("");
-      setUsername("");
-      setBirthDate("");
+      setFullName(updatedUser.fullName);
+      setUsername(updatedUser.userName);
+      setBirthDate(updatedUser.birthDate);
+
+      localStorage.setItem("user", JSON.stringify(updatedUser));
     } catch (error) {
       console.error("Error updating personal info:", error);
     }
@@ -43,7 +50,7 @@ const Account = () => {
     }
 
     try {
-      const response = await axios.put(
+      await axios.put(
         `${process.env.REACT_APP_API_URL}/account/update-security`,
         {
           userId: user.id,
@@ -51,8 +58,6 @@ const Account = () => {
           newPassword,
         }
       );
-
-      console.log(response.data.message);
 
       setNewPassword("");
       setConfirmNewPassword("");
@@ -65,7 +70,7 @@ const Account = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.delete(
+      await axios.delete(
         `${process.env.REACT_APP_API_URL}/account/delete-account`,
         {
           data: {
@@ -73,8 +78,6 @@ const Account = () => {
           },
         }
       );
-
-      console.log(response.data.message);
     } catch (error) {
       console.error("Error deleting account:", error);
     }
