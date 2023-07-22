@@ -8,10 +8,12 @@ import CreatePostPage from "./components/AddBlog";
 import UpdatePostPage from "./components/Posts";
 import BlogDetails from "./components/BlogDetails";
 import Home from "./components/Home";
+import Logout from "./components/Logout";
 
 const App = () => {
   return (
     <BrowserRouter>
+      <Logout />
       <Routes>
         <Route
           path="/login"
