@@ -92,7 +92,8 @@ class Comment {
         ON
           comments.commenter_id = users.id
         WHERE
-          comments.commenter_id = $1;
+          comments.commenter_id = $1
+        ORDER BY comments.created_at DESC;
       `;
       const result = await pool.query(query, [userId]);
       return result.rows;

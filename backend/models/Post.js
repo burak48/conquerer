@@ -72,6 +72,7 @@ class Post {
   static async findAll() {
     const selectQuery = `
       SELECT * FROM posts
+      ORDER BY created_at DESC
     `;
     const result = await pool.query(selectQuery);
     return result.rows.map((row) => new Post(row));
@@ -135,6 +136,7 @@ class Post {
       LEFT JOIN comments c ON p.id = c.blog_id
       WHERE p.user_id = $1
       GROUP BY p.id
+      ORDER BY p.created_at DESC
     `;
       const result = await pool.query(query, [userId]);
       return result.rows;
@@ -146,7 +148,8 @@ class Post {
 
   static async getPostsByCategory(categoryName) {
     try {
-      const selectQuery = "SELECT * FROM posts WHERE category = $1";
+      const selectQuery =
+        "SELECT * FROM posts WHERE category = $1 ORDER BY created_at DESC";
       const result = await pool.query(selectQuery, [categoryName]);
       return result.rows.map((row) => new Post(row));
     } catch (error) {
@@ -157,7 +160,8 @@ class Post {
 
   static async findByTitle(title) {
     try {
-      const selectQuery = "SELECT * FROM posts WHERE title LIKE $1";
+      const selectQuery =
+        "SELECT * FROM posts WHERE title LIKE $1 ORDER BY created_at DESC";
       const result = await pool.query(selectQuery, [`%${title}%`]);
       return result.rows.map((row) => new Post(row));
     } catch (error) {
