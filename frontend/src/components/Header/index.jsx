@@ -24,12 +24,12 @@ const Header = () => {
           <>
             <Link
               to="/account"
-              className="text-blue-500 hover:text-blue-600 mr-4"
+              className="text-blue-500 hover:text-sky-900 mr-4"
             >
-              Account
+              Profile
             </Link>
             <button
-              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+              className="bg-sky-900 hover:bg-sky-950 text-white font-bold py-2 px-4 rounded"
               onClick={handleLogout}
             >
               Logout

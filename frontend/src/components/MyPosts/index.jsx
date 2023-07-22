@@ -39,7 +39,7 @@ const MyPosts = () => {
             </span>
           </div>
           <Link to={`/post/${post.id}`}>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+            <button className="bg-sky-900 hover:bg-sky-950 text-white font-bold py-2 px-4 rounded">
               Update
             </button>
           </Link>

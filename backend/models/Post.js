@@ -25,7 +25,14 @@ class Post {
     this.userId = user_id;
   }
 
-  static async create({ title, description, category, userId }) {
+  static async create({
+    title,
+    description,
+    category,
+    userId,
+    created_at,
+    updated_at,
+  }) {
     try {
       const createTableQuery = `
         CREATE TABLE IF NOT EXISTS posts (
@@ -33,17 +40,26 @@ class Post {
           title VARCHAR(255) NOT NULL,
           description TEXT NOT NULL,
           category VARCHAR(255) NOT NULL,
+          created_at TIMESTAMP DEFAULT NOW(),
+          updated_at TIMESTAMP DEFAULT NULL,
           user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
         )
       `;
       await pool.query(createTableQuery);
 
       const insertQuery = `
-        INSERT INTO posts (title, description, category, user_id)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO posts (title, description, category, user_id, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING id
       `;
-      const values = [title, description, category, userId];
+      const values = [
+        title,
+        description,
+        category,
+        userId,
+        created_at,
+        updated_at,
+      ];
       const result = await pool.query(insertQuery, values);
 
       return result.rows[0].id;
@@ -69,18 +85,19 @@ class Post {
     if (result.rows.length === 0) {
       return null;
     }
-    const { title, description, category, user_id } = result.rows[0];
-    return new Post({ id, title, description, category, user_id });
+
+    return result.rows[0];
   }
 
-  static async update(id, { title, description, category }) {
+  static async update(id, { title, description, category, updated_at }) {
     try {
       const query =
-        "UPDATE posts SET title = $1, description = $2, category = $3 WHERE id = $4 RETURNING *";
+        "UPDATE posts SET title = $1, description = $2, category = $3, updated_at = $4 WHERE id = $5 RETURNING *";
       const result = await pool.query(query, [
         title,
         description,
         category,
+        updated_at,
         id,
       ]);
       return result.rows[0];
@@ -108,10 +125,6 @@ class Post {
 
   static async getPostsByUserId(userId) {
     try {
-      // const query = `
-      //   SELECT * FROM posts
-      //   WHERE user_id = $1
-      // `;
       const query = `
       SELECT
         p.id,
@@ -150,6 +163,30 @@ class Post {
     } catch (error) {
       console.error("Error fetching posts by title:", error);
       throw error;
+    }
+  }
+
+  static async getCommentsWithCommenterInfo(postId) {
+    try {
+      const query = `
+        SELECT
+          comments.*,
+          users.fullName AS commenterName
+        FROM
+          comments
+        INNER JOIN
+          users
+        ON
+          comments.commenter_id = users.id
+        WHERE
+          comments.blog_id = $1
+      `;
+      const values = [postId];
+      const result = await pool.query(query, values);
+      return result.rows;
+    } catch (err) {
+      console.error("Error fetching comments with commenter info:", err);
+      throw new Error("Failed to fetch comments with commenter info");
     }
   }
 }

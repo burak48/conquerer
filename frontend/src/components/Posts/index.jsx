@@ -47,7 +47,7 @@ const UpdatePostPage = ({ postId }) => {
         updatedData
       );
 
-      navigate(`/post/${id}`);
+      navigate(`/blogs/${id}`);
     } catch (error) {
       console.error("Error updating blog post:", error);
     }

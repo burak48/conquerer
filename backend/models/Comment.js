@@ -25,19 +25,8 @@ class Comment {
     this.createdAt = createdAt;
   }
 
-  static async create({ blogId, commenterId, content }) {
+  static async newComment({ blogId, commenterId, content }) {
     try {
-      const createTableQuery = `
-        CREATE TABLE IF NOT EXISTS comments (
-            id SERIAL PRIMARY KEY,
-            blog_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
-            commenter_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-            content TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT NOW()
-        )
-      `;
-      await pool.query(createTableQuery);
-
       const insertQuery = `
         INSERT INTO comments (blog_id, commenter_id, content)
         VALUES ($1, $2, $3)
@@ -65,6 +54,51 @@ class Comment {
     } catch (err) {
       console.error("Error finding comments:", err);
       throw new Error("Failed to find comments");
+    }
+  }
+
+  static async createTable() {
+    try {
+      const createTableQuery = `
+        CREATE TABLE IF NOT EXISTS comments (
+          id SERIAL PRIMARY KEY,
+          blog_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+          commenter_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+          content TEXT NOT NULL,
+          created_at TIMESTAMP DEFAULT NOW()
+        )
+      `;
+
+      await pool.query(createTableQuery);
+    } catch (error) {
+      console.error("Error creating comments table:", error);
+      throw new Error("Failed to create comments table");
+    }
+  }
+
+  static async getComments(userId) {
+    try {
+      const query = `
+        SELECT
+          comments.id,
+          comments.commenter_id,
+          comments.content,
+          comments.created_at,
+          users.fullName AS commenterName
+        FROM
+          comments
+        INNER JOIN
+          users
+        ON
+          comments.commenter_id = users.id
+        WHERE
+          comments.commenter_id = $1;
+      `;
+      const result = await pool.query(query, [userId]);
+      return result.rows;
+    } catch (err) {
+      console.error("Error fetching comments:", err);
+      throw new Error("Failed to fetch comments");
     }
   }
 }

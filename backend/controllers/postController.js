@@ -4,7 +4,17 @@ exports.createPost = async (req, res) => {
   try {
     const { title, description, category, userId } = req.body;
 
-    const postId = await Post.create({ title, description, category, userId });
+    const createdAt = new Date();
+    const updatedAt = null;
+
+    const postId = await Post.create({
+      title,
+      description,
+      category,
+      userId,
+      created_at: createdAt,
+      updated_at: updatedAt,
+    });
 
     res.status(201).json({ id: postId, message: "Post created successfully" });
   } catch (error) {
@@ -42,8 +52,15 @@ exports.updatePost = async (req, res) => {
   const { id } = req.params;
   const { title, description, category } = req.body;
 
+  const updatedAt = new Date();
+
   try {
-    const updatedPost = await Post.update(id, { title, description, category });
+    const updatedPost = await Post.update(id, {
+      title,
+      description,
+      category,
+      updated_at: updatedAt,
+    });
     if (!updatedPost) {
       return res.status(404).json({ error: "Blog post not found" });
     }

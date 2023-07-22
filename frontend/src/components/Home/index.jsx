@@ -50,28 +50,26 @@ const Home = () => {
                 </svg>
 
                 <Link to="/account" className="mr-4">
-                  Account
+                  Profile
                 </Link>
               </h4>
             </div>
           </div>
 
           <div className="w-1/2">
-            <button
-              className="w-full bg-sky-900 hover:bg-sky-950 text-white font-bold py-2 px-4 rounded"
-              onClick={() => {}}
-            >
-              Post
-            </button>
+            <Link to="/post">
+              <button className="w-full bg-sky-900 hover:bg-sky-950 text-white font-bold py-2 px-4 rounded">
+                Post
+              </button>
+            </Link>
           </div>
 
           <div className="w-1/2">
-            <button
-              className="w-full bg-sky-900 hover:bg-sky-950 text-white font-bold py-2 px-4 rounded"
-              onClick={() => {}}
-            >
-              Logout
-            </button>
+            <Link to="/login">
+              <button className="w-full bg-sky-900 hover:bg-sky-950 text-white font-bold py-2 px-4 rounded">
+                Logout
+              </button>
+            </Link>
           </div>
         </div>
 

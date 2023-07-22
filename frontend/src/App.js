@@ -12,14 +12,61 @@ import Home from "./components/Home";
 const App = () => {
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/account" element={<Account />} />
-        <Route path="/post" element={<CreatePostPage />} />
-        <Route path="/post/:id" element={<UpdatePostPage />} />
-        <Route path="/blogs/:id" element={<BlogDetails />} />
+        <Route
+          path="/login"
+          element={
+            <>
+              <Header />
+              <Login />
+            </>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <>
+              <Header />
+              <Register />
+            </>
+          }
+        />
+        <Route
+          path="/account"
+          element={
+            <>
+              <Header />
+              <Account />
+            </>
+          }
+        />
+        <Route
+          path="/post"
+          element={
+            <>
+              <Header />
+              <CreatePostPage />
+            </>
+          }
+        />
+        <Route
+          path="/post/:id"
+          element={
+            <>
+              <Header />
+              <UpdatePostPage />
+            </>
+          }
+        />
+        <Route
+          path="/blogs/:id"
+          element={
+            <>
+              <Header />
+              <BlogDetails />
+            </>
+          }
+        />
         <Route path="/home" element={<Home />} />
         <Route path="/" element={<Navigate to="/login" />} />
       </Routes>
