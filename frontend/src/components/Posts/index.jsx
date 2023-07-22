@@ -4,6 +4,11 @@ import { useParams, useNavigate } from "react-router-dom";
 
 const UpdatePostPage = ({ postId }) => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -11,14 +16,18 @@ const UpdatePostPage = ({ postId }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [post, setPost] = useState(null);
 
   useEffect(() => {
     const fetchBlogPost = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/posts/${id}`
+          `${process.env.REACT_APP_API_URL}/posts/${id}`,
+          { headers }
         );
         const data = response.data;
+
+        setPost(response.data);
 
         setTitle(data.title);
         setDescription(data.description);
@@ -29,6 +38,7 @@ const UpdatePostPage = ({ postId }) => {
     };
 
     fetchBlogPost();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleUpdate = async (e) => {
@@ -44,7 +54,8 @@ const UpdatePostPage = ({ postId }) => {
 
       await axios.put(
         `${process.env.REACT_APP_API_URL}/posts/${id}`,
-        updatedData
+        updatedData,
+        { headers }
       );
 
       navigate(`/blogs/${id}`);
@@ -55,13 +66,20 @@ const UpdatePostPage = ({ postId }) => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/posts/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/posts/${id}`, {
+        headers,
+      });
 
       navigate("/home");
     } catch (error) {
       console.error("Error deleting blog post:", error);
     }
   };
+
+  // Inform user if not logged.
+  if (!post || (post && post.status === 401)) {
+    return <p>You are not authorized to view this post.</p>;
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

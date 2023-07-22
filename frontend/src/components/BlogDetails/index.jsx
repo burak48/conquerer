@@ -4,6 +4,11 @@ import axios from "axios";
 
 const BlogDetails = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
 
   const { id } = useParams();
   const [blog, setBlog] = useState(null);
@@ -15,13 +20,14 @@ const BlogDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/blogs/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/blogs/${id}`, { headers })
       .then((response) => {
         const { blog, comments } = response.data;
         setBlog(blog);
         setComments(comments);
         setNumComments(comments.length);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, numComments]);
 
   const handleAddComment = async (e) => {
@@ -37,7 +43,8 @@ const BlogDetails = () => {
       {
         commenterName: user.fullName,
         content: commentContent,
-      }
+      },
+      { headers }
     );
     setError("");
     setComments([...comments, response.data]);

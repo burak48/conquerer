@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const SearchPosts = () => {
+const SearchPosts = ({ setSearchResults }) => {
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = async () => {
     try {
-      await axios.get(`${process.env.REACT_APP_API_URL}/posts/search`, {
-        params: { search_term: searchQuery },
-      });
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/posts/search`,
+        {
+          params: { search_term: searchQuery },
+          headers: headers,
+        }
+      );
+      setSearchResults(response.data);
     } catch (error) {
       console.error("Error searching posts:", error);
     }

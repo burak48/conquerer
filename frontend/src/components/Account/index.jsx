@@ -1,14 +1,28 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Account = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
+  const navigate = useNavigate();
 
   const [fullName, setFullName] = useState(user.fullName);
   const [username, setUsername] = useState(user?.userName);
   const [birthDate, setBirthDate] = useState(user?.birthDate);
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
   const handleUpdatePersonalInfo = async (e) => {
     e.preventDefault();
@@ -21,7 +35,8 @@ const Account = () => {
           fullName,
           username,
           birthDate,
-        }
+        },
+        { headers }
       );
 
       const updatedUser = {
@@ -56,11 +71,13 @@ const Account = () => {
           userId: user.id,
           fullName,
           newPassword,
-        }
+        },
+        { headers }
       );
 
       setNewPassword("");
       setConfirmNewPassword("");
+      handleLogout();
     } catch (error) {
       console.error("Error updating security:", error);
     }
@@ -76,8 +93,10 @@ const Account = () => {
           data: {
             userId: user.id,
           },
+          headers: headers,
         }
       );
+      handleLogout();
     } catch (error) {
       console.error("Error deleting account:", error);
     }

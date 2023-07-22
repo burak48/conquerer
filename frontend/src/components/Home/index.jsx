@@ -8,9 +8,15 @@ import SearchPosts from "../SearchPosts";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("My Posts");
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleTabClick = (tabTitle) => {
     setActiveTab(tabTitle);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
 
   return (
@@ -66,7 +72,10 @@ const Home = () => {
 
           <div className="w-1/2">
             <Link to="/login">
-              <button className="w-full bg-sky-900 hover:bg-sky-950 text-white font-bold py-2 px-4 rounded">
+              <button
+                onClick={handleLogout}
+                className="w-full bg-sky-900 hover:bg-sky-950 text-white font-bold py-2 px-4 rounded"
+              >
                 Logout
               </button>
             </Link>
@@ -75,7 +84,7 @@ const Home = () => {
 
         {/* Middle grid */}
         <div className="my-8">
-          <SearchPosts />
+          <SearchPosts setSearchResults={setSearchResults} />
 
           <div className="border-b border-gray-300 mb-4 space-x-4">
             <button
@@ -141,22 +150,37 @@ const Home = () => {
           </div>
 
           <div className="tabcontent">
-            {activeTab === "My Posts" && <MyPosts />}
-
-            {activeTab === "Last Posts" && <LastPosts />}
-
-            {activeTab === "Business" && (
-              <CategoryPosts category={"Business"} />
+            {activeTab === "My Posts" && (
+              <MyPosts searchResults={searchResults} />
             )}
 
-            {activeTab === "Money" && <CategoryPosts category={"Money"} />}
+            {activeTab === "Last Posts" && (
+              <LastPosts searchResults={searchResults} />
+            )}
+
+            {activeTab === "Business" && (
+              <CategoryPosts
+                category={"Business"}
+                searchResults={searchResults}
+              />
+            )}
+
+            {activeTab === "Money" && (
+              <CategoryPosts category={"Money"} searchResults={searchResults} />
+            )}
 
             {activeTab === "Technology" && (
-              <CategoryPosts category={"Technology"} />
+              <CategoryPosts
+                category={"Technology"}
+                searchResults={searchResults}
+              />
             )}
 
             {activeTab === "Artificial Intelligence" && (
-              <CategoryPosts category={"Artificial Intelligence"} />
+              <CategoryPosts
+                category={"Artificial Intelligence"}
+                searchResults={searchResults}
+              />
             )}
           </div>
         </div>

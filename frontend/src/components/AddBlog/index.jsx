@@ -3,6 +3,11 @@ import axios from "axios";
 
 const CreatePostPage = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -28,12 +33,16 @@ const CreatePostPage = () => {
       const description = e.target.description.value;
       const category = e.target.category.value;
 
-      await axios.post(`${process.env.REACT_APP_API_URL}/posts`, {
-        userId: user.id,
-        title,
-        description,
-        category,
-      });
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/posts`,
+        {
+          userId: user.id,
+          title,
+          description,
+          category,
+        },
+        { headers }
+      );
 
       setTitle("");
       setDescription("");

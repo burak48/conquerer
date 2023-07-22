@@ -2,14 +2,21 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const LastPosts = () => {
+const LastPosts = ({ searchResults }) => {
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/posts`
+          `${process.env.REACT_APP_API_URL}/posts`,
+          { headers }
         );
         setPosts(response.data);
       } catch (error) {
@@ -18,11 +25,14 @@ const LastPosts = () => {
     };
 
     fetchPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  let postsToDisplay = searchResults.length ? searchResults : posts;
 
   return (
     <div>
-      {posts.map((post) => (
+      {postsToDisplay.map((post) => (
         <div
           key={post.id}
           className="bg-white py-8 mb-4 flex justify-between items-center"

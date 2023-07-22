@@ -19,14 +19,11 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/register`,
-        {
-          fullName,
-          email,
-          password,
-        }
-      );
+      await axios.post(`${process.env.REACT_APP_API_URL}/auth/register`, {
+        fullName,
+        email,
+        password,
+      });
 
       alert("Registration successful!");
       navigate("/login");

@@ -4,6 +4,11 @@ import "./styles.css";
 
 const MyComments = () => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
 
   const [numCommentsToShow, setNumCommentsToShow] = useState(3);
   const [showMoreButton, setShowMoreButton] = useState(true);
@@ -11,13 +16,16 @@ const MyComments = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/blogs/comments/${user.id}`)
+      .get(`${process.env.REACT_APP_API_URL}/blogs/comments/${user.id}`, {
+        headers,
+      })
       .then((response) => {
         setMyComments(response.data);
       })
       .catch((error) => {
         console.error("Error fetching comments:", error);
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.id]);
 
   const handleShowMoreComments = () => {

@@ -3,16 +3,22 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "./styles.css";
 
-const MyPosts = () => {
+const MyPosts = ({ searchResults }) => {
   const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
 
   const [posts, setPosts] = useState([]);
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/posts/user/${user.id}`
+          `${process.env.REACT_APP_API_URL}/posts/user/${user.id}`,
+          { headers }
         );
         setPosts(response.data);
       } catch (error) {
@@ -21,11 +27,14 @@ const MyPosts = () => {
     };
 
     fetchPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user.id]);
+
+  let postsToDisplay = searchResults.length ? searchResults : posts;
 
   return (
     <div className="custom-max-height-75 overflow-y-auto">
-      {posts.map((post) => (
+      {postsToDisplay.map((post) => (
         <div
           key={post.id}
           className="bg-white py-8 mb-4 flex justify-between items-center"
