@@ -8,16 +8,25 @@ const dbUser = config.dbUsername;
 const dbPassword = config.dbPassword;
 const dbName = config.dbName;
 
-const pool = new Pool({
-  user: dbUser,
-  host: dbHost,
-  database: dbName,
-  password: dbPassword,
-  port: dbPort,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
+let pool;
+if (process.env.NODE_ENV === "production") {
+  pool = new Pool({
+    user: dbUser,
+    host: dbHost,
+    database: dbName,
+    password: dbPassword,
+    port: dbPort,
+    ssl: { rejectUnauthorized: false },
+  });
+} else {
+  pool = new Pool({
+    user: dbUser,
+    host: dbHost,
+    database: dbName,
+    password: dbPassword,
+    port: dbPort,
+  });
+}
 
 class Post {
   constructor({ id, title, description, category, user_id }) {

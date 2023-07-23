@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import "./styles.css";
 
 const CategoryPosts = ({ category, searchResults }) => {
   const token = localStorage.getItem("token");
@@ -35,7 +36,7 @@ const CategoryPosts = ({ category, searchResults }) => {
   let postsToDisplay = searchResults.length ? postsInCategory : categories;
 
   return (
-    <div>
+    <div className="custom-max-height-75 overflow-y-auto">
       {postsToDisplay.length > 0 ? (
         postsToDisplay.map((post, index) => (
           <div

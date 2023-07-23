@@ -4,6 +4,7 @@ This is a REST API for a blog application that allows users to create and manage
 
 ## Table of Contents
 
+- [Demo](#demo)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Endpoints](#endpoints)
@@ -11,6 +12,12 @@ This is a REST API for a blog application that allows users to create and manage
 - [Error Handling](#error-handling)
 - [Contributing](#contributing)
 - [License](#license)
+
+## Demo
+
+Try [backend](https://conquerer-backend.vercel.app/)
+<br />
+Try [frontend](https://conquerer-frontend.vercel.app)
 
 ## Installation
 
@@ -31,11 +38,11 @@ npm install
 
 Create a `.env` file at the root of the project and add the following environment variables:
 
-- DB_HOST=your-database-host
-- DB_PORT=your-database-port
-- DB_USERNAME=your-database-username
-- DB_PASSWORD=your-database-password
-- DB_NAME=your-database-name
+- POSTGRES_HOST=your-database-host
+- POSGRES_PORT=your-database-port
+- POSTGRES_USER=your-database-username
+- POSTGRES_PASSWORD=your-database-password
+- POSTGRES_DATABASE=your-database-name
 
 - JWT_SECRET_KEY=your-jwt-secret
 - PORT=your-backend-server-port
