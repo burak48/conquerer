@@ -10,17 +10,17 @@ const Header = () => {
     navigate("/login");
   };
 
+  const token = localStorage.getItem("token");
+
   return (
     <header className="bg-white p-4 flex justify-between items-center">
       <div>
         <h1 className="text-2xl font-bold">
-          <Link to={localStorage.getItem("token") ? "/home" : "/login"}>
-            Home
-          </Link>
+          <Link to={token ? "/home" : "/login"}>Home</Link>
         </h1>
       </div>
       <div>
-        {localStorage.getItem("token") && (
+        {token && (
           <>
             <Link
               to="/account"
